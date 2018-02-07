@@ -60,8 +60,8 @@ def mean_filter(filter_size, img):
              new_img[i,j] = np.average(crop_img)
     return new_img
 #file_name = "lena_gray.bmp"
-file_name ="zelda2.bmp"
-file_name = "barbara_gray.bmp"
+#file_name ="zelda2.bmp"
+file_name = "./../../DM/ID13_YANGJUYING_OD01/Intensity/ID13_YANGJUYING_OD01_0.bmp"
 img = mpimg.imread(file_name)
 #img = np.zeros((200,200))
 #tem_img = np.ones((100,200))
