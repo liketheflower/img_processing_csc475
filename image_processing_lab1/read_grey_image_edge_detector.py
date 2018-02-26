@@ -26,8 +26,9 @@ def mean_filter(filter_size, img):
 #file_name = "lena_gray.bmp"
 #img = mpimg.imread(file_name)
 img = np.zeros((100,100))
-img[:,:40] = 255
-img[:,60:] = 255
+img = np.random.randint(256,size = (100,100))
+#img[:,:40] = 255
+#img[:,60:] = 255
 print img[40,:]
 plt.figure()
 plt.imshow(img, cmap='gray', aspect='auto')

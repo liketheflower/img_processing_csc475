@@ -9,25 +9,19 @@ def show_img(img):
     plt.imshow(img, cmap='gray', aspect='auto')
     plt.show()
 
-def mean_filter_new(img):
-    # mean filter
-    filter_ =[[1/9.0 ,1/9.0, 1/9.0],
-              [1/9.0 ,1/9.0, 1/9.0],
-              [1/9.0 ,1/9.0, 1/9.0]]
-    # gaussian filter
-    filter_ =[[1/16.0 ,2/16.0, 1/16.0],
-              [2/16.0 ,4/16.0, 2/16.0],
-              [1/16.0 ,2/16.0, 1/16.0]]
+
+def sobel_filter(img, x= True):
     
     # sobel filter row(x) direction
-    filter_ =[[-1 ,0, 1],
+    if x:
+        filter_ =[[-1 ,0, 1],
               [-2 ,0, 2],
               [-1 ,0, 1]]
+    else:
     # sobel filter col(y) direction
-    """    filter_ =[[-1 ,-2, -1],
+        filter_ =[[-1 ,-2, -1],
                [0 , 0, 0],
                [1 , 2, 1]]
-    """
     new_img = np.zeros(img.shape)
     R, C = new_img.shape
     D = 1
@@ -43,6 +37,18 @@ def mean_filter_new(img):
                      new_img[i,j] +=crop_img[ii,jj]*filter_[ii][jj] 
     return new_img
 
+def distance(x,y):
+    return (x**2+y**2)**0.5
+
+
+def get_magnitude(x, y):
+
+    new_img = np.zeros(x.shape)
+    R, C = new_img.shape
+    for i in xrange(R):
+        for j in xrange(C):
+            new_img[i,j] = distance(x[i,j],y[i,j])
+    return new_img
 
 
 def mean_filter(filter_size, img):
@@ -62,6 +68,7 @@ def mean_filter(filter_size, img):
 file_name = "lena_gray.bmp"
 #file_name ="zelda2.bmp"
 #file_name = "./../../DM/ID13_YANGJUYING_OD01/Intensity/ID13_YANGJUYING_OD01_0.bmp"
+file_name = "clown.bmp"
 img = mpimg.imread(file_name)
 #img = np.zeros((200,200))
 #tem_img = np.ones((100,200))
@@ -71,14 +78,40 @@ plt.imshow(img, cmap='gray', aspect='auto')
 plt.show()
 filter_size = 3
 
-#new_img = mean_filter(filter_size,img)
-new_img = mean_filter_new(img)
+# show the sobel x and sobel y images
+new_img_x = sobel_filter(img)
 plt.figure()
-plt.imshow(new_img, cmap='gray', aspect='auto')
-plt.title("image after new mean filter with size of "+str(filter_size))
+plt.imshow(new_img_x, cmap='gray', aspect='auto')
+plt.title("sobel x ")
 plt.show()
 
+new_img_y = sobel_filter(img,False)
+plt.figure()
+plt.imshow(new_img_y, cmap='gray', aspect='auto')
+plt.title("sobel y ")
+plt.show()
 
+magnitude_img = get_magnitude(new_img_x, new_img_y)
+# show the magnitude
+plt.figure()
+plt.imshow(magnitude_img, cmap='gray', aspect='auto')
+plt.title("magnitude image ")
+plt.show()
+
+def get_sharp(img, magnitude_img):
+    new_img = np.zeros(img.shape)
+    R, C = new_img.shape
+    for i in xrange(R):
+        for j in xrange(C):
+            new_img[i,j] = img[i,j]+magnitude_img[i,j]
+    return new_img
+
+
+sharp_img = get_sharp(img, magnitude_img)
+plt.figure()
+plt.imshow(sharp_img, cmap='gray', aspect='auto')
+plt.title("sharp image ")
+plt.show()
 
 start =(100,100)
 end =(300,300)
