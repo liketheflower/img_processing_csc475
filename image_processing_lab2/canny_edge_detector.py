@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import nms
+
 def crop(start, end, origin_image):
     return origin_image[start[0]:end[0]+1,start[1]:end[1]+1]
 
@@ -65,6 +67,20 @@ def mean_filter(filter_size, img):
              crop_img=crop(start, end, img)
              new_img[i,j] = np.average(crop_img)
     return new_img
+
+def get_counter_info(a):
+    b = a.astype(int)
+    b = b.reshape(1,len(b)*len(b[0]))
+    print (collections.Counter(b[0]))
+def get_max_vlaue_of_2darray(a):
+    return max(a.max(axis=1))
+
+
+#get_counter_info(output_gray_level_edge_image)
+
+
+
+
 file_name = "lena_gray.bmp"
 #file_name ="zelda2.bmp"
 #file_name = "./../../DM/ID13_YANGJUYING_OD01/Intensity/ID13_YANGJUYING_OD01_0.bmp"
@@ -97,7 +113,7 @@ plt.figure()
 plt.imshow(magnitude_img, cmap='gray', aspect='auto')
 plt.title("magnitude image ")
 plt.show()
-
+plt.close()
 def get_sharp(img, magnitude_img):
     new_img = np.zeros(img.shape)
     R, C = new_img.shape
@@ -105,6 +121,16 @@ def get_sharp(img, magnitude_img):
         for j in xrange(C):
             new_img[i,j] = img[i,j]+magnitude_img[i,j]
     return new_img
+
+thin_edge = nms.non_max(magnitude_img,new_img_x,new_img_y)
+print thin_edge.shape
+thin_edge=(255/get_max_vlaue_of_2darray(thin_edge))*thin_edge
+print thin_edge.shape
+print thin_edge[0]
+plt.figure()
+plt.imshow(thin_edge, cmap='gray', aspect='auto')
+plt.title("edge after non max supression ")
+plt.show()
 
 
 sharp_img = get_sharp(img, magnitude_img)
