@@ -46,6 +46,9 @@ conda install pytorch torchvision -c pytorch
 
 conda install -c anaconda tensorflow
 
+gpu:
+conda install -c anaconda tensorflow-gpu
+
 # install keras
 
 conda install -c conda-forge keras
