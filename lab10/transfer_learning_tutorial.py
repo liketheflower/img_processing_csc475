@@ -258,9 +258,12 @@ def visualize_model(model, num_images=6):
 #
 
 model_ft = models.resnet18(pretrained=True)
+print("original resnet18")
+print(model_ft)
 num_ftrs = model_ft.fc.in_features
 model_ft.fc = nn.Linear(num_ftrs, 2)
-
+print("model after modify")
+print(model_ft)
 if use_gpu:
     model_ft = model_ft.cuda()
 
